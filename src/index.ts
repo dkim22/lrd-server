@@ -6,6 +6,7 @@ import Redis from 'ioredis'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
 import cors from 'cors'
+import path from 'path'
 import { COOKIE_NAME, __prod__ } from './constants'
 import { HelloResolver } from './resolvers/hello'
 import { PostResolver } from './resolvers/post'
@@ -23,8 +24,10 @@ const main = async () => {
     password: '123123123',
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, './migrations/*')],
     entities: [Post, User],
   })
+  await conn.runMigrations()
 
   console.log(conn)
 
